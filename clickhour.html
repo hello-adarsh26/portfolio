@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ClickHour – Hire a Photographer by the Hour</title>
+<style>
+:root{--bg:#faf8f5;--card:#fff;--ink:#1c1b1a;--mute:#6b6762;--line:#e6e1da;--accent:#e4572e;--accent-ink:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151413;--card:#201f1d;--ink:#f2efea;--mute:#a09b94;--line:#33312e;--accent:#ff7a50;--accent-ink:#1a1210;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#151413;--card:#201f1d;--ink:#f2efea;--mute:#a09b94;--line:#33312e;--accent:#ff7a50;--accent-ink:#1a1210;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+header{display:flex;justify-content:space-between;align-items:center;padding:16px 0}
+.logo{font-weight:800;font-size:1.3rem;letter-spacing:-.5px}.logo span{color:var(--accent)}
+nav a{color:var(--mute);text-decoration:none;margin-left:18px;font-size:.95rem}
+nav a:hover{color:var(--ink)}
+.hero{padding:48px 0 28px}
+.hero h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.1;margin:0 0 12px;letter-spacing:-1px;max-width:700px}
+.hero p{color:var(--mute);max-width:520px;margin:0 0 24px;font-size:1.05rem}
+.filters{display:flex;flex-wrap:wrap;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.filters label{display:flex;flex-direction:column;font-size:.75rem;color:var(--mute);gap:4px;flex:1;min-width:140px}
+select,input{font:inherit;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;padding:11px 18px;border-radius:10px;font-weight:700}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.count{margin:26px 0 12px;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding-bottom:30px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.top{display:flex;gap:12px;align-items:center}
+.av{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;flex:none}
+.card h3{margin:0;font-size:1.05rem}
+.meta{color:var(--mute);font-size:.85rem}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:.72rem;padding:3px 9px;border-radius:99px;border:1px solid var(--line);color:var(--mute)}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.price{font-size:1.25rem;font-weight:800}.price small{font-weight:400;color:var(--mute);font-size:.8rem}
+.how{padding:30px 0}.how h2,#bookings h2{font-size:1.6rem;margin:0 0 16px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.step b{color:var(--accent);font-size:1.4rem}
+#bookings{padding:10px 0 50px}
+.bk{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:10px}
+.empty{color:var(--mute)}
+footer{border-top:1px solid var(--line);padding:24px 0;color:var(--mute);font-size:.85rem;text-align:center}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:20}
+.modal.open{display:flex}
+.box{background:var(--card);border-radius:18px;padding:22px;width:100%;max-width:430px;max-height:90vh;overflow:auto}
+.box h3{margin:0 0 4px}
+.box label{display:block;font-size:.8rem;color:var(--mute);margin:12px 0 4px}
+.box input,.box select{width:100%}
+.total{display:flex;justify-content:space-between;font-size:1.1rem;font-weight:800;margin:18px 0 12px;padding-top:12px;border-top:1px dashed var(--line)}
+.err{color:#d33;font-size:.85rem;min-height:1.2em}
+.actions{display:flex;gap:10px}.actions .btn{flex:1}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:.3s;z-index:30}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="logo">Click<span>Hour</span></div><nav><a href="#find">Find</a><a href="#how">How it works</a><a href="#bookings">My bookings</a></nav></header>
+
+<section class="hero" id="find">
+<h1>Hire a photographer by the hour, near you.</h1>
+<p>Birthday, product shoot, couple portraits or a quick headshot – pick a local pro, choose your hours, and book in under a minute.</p>
+<div class="filters">
+<label>City<select id="city"></select></label>
+<label>Shoot type<select id="type"><option value="">Any</option><option>Portrait</option><option>Wedding</option><option>Event</option><option>Product</option><option>Family</option><option>Fashion</option></select></label>
+<label>Max price / hr<select id="max"><option value="99999">Any</option><option value="1000">₹1,000</option><option value="1500">₹1,500</option><option value="2000">₹2,000</option></select></label>
+<label>Sort by<select id="sort"><option value="dist">Nearest</option><option value="price">Lowest price</option><option value="rating">Top rated</option></select></label>
+</div>
+</section>
+
+<div class="count" id="count"></div>
+<div class="grid" id="grid"></div>
+
+<section class="how" id="how"><h2>How it works</h2>
+<div class="steps">
+<div class="step"><b>1</b><h3>Search</h3><p class="meta">Filter local photographers by city, style and budget.</p></div>
+<div class="step"><b>2</b><h3>Pick your hours</h3><p class="meta">Choose date, start time and duration. Price updates live.</p></div>
+<div class="step"><b>3</b><h3>Shoot</h3><p class="meta">Your photographer confirms and shows up ready to shoot.</p></div>
+</div></section>
+
+<section id="bookings"><h2>My bookings</h2><div id="bklist"></div></section>
+</div>
+<footer>© 2026 ClickHour · Demo project – bookings are stored only in your browser.</footer>
+
+<div class="modal" id="modal"><div class="box">
+<h3 id="mName"></h3><div class="meta" id="mMeta"></div>
+<label>Your name<input id="fName" placeholder="Full name"></label>
+<label>Phone<input id="fPhone" inputmode="tel" placeholder="10-digit mobile number"></label>
+<label>Date<input type="date" id="fDate"></label>
+<label>Start time<input type="time" id="fTime" value="10:00"></label>
+<label>Duration<select id="fHours"></select></label>
+<div class="total"><span>Total</span><span id="mTotal"></span></div>
+<div class="err" id="err"></div>
+<div class="actions"><button class="btn ghost" id="cancel">Cancel</button><button class="btn" id="confirm">Confirm booking</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const P=[
+{id:1,n:"Aarav Mehta",c:"Pune",a:"Koregaon Park",d:1.8,r:4.9,j:212,p:1200,t:["Portrait","Fashion"],col:"#e4572e"},
+{id:2,n:"Neha Kulkarni",c:"Pune",a:"Baner",d:4.2,r:4.8,j:156,p:900,t:["Family","Event"],col:"#2e86e4"},
+{id:3,n:"Rohan Desai",c:"Pune",a:"Kothrud",d:6.5,r:4.6,j:88,p:700,t:["Product","Portrait"],col:"#2ea66b"},
+{id:4,n:"Isha Kapoor",c:"Mumbai",a:"Bandra",d:2.1,r:5.0,j:301,p:2000,t:["Wedding","Fashion"],col:"#a64ee4"},
+{id:5,n:"Kabir Shah",c:"Mumbai",a:"Andheri",d:5.4,r:4.7,j:129,p:1000,t:["Event","Product"],col:"#e4a02e"},
+{id:6,n:"Meera Iyer",c:"Bengaluru",a:"Indiranagar",d:3.0,r:4.9,j:174,p:1500,t:["Portrait","Wedding"],col:"#e42e7a"},
+{id:7,n:"Vikram Rao",c:"Bengaluru",a:"Koramangala",d:4.8,r:4.5,j:67,p:800,t:["Family","Product"],col:"#2ec4b6"},
+{id:8,n:"Simran Gill",c:"Delhi",a:"Hauz Khas",d:2.6,r:4.8,j:143,p:1300,t:["Fashion","Event"],col:"#6a5acd"},
+{id:9,n:"Arjun Nair",c:"Delhi",a:"Saket",d:7.2,r:4.4,j:52,p:600,t:["Portrait","Family"],col:"#8d6e63"}
+];
+const $=id=>document.getElementById(id);
+const inr=n=>"₹"+n.toLocaleString("en-IN");
+let current=null;
+
+[...new Set(P.map(x=>x.c))].forEach(c=>$("city").add(new Option(c,c)));
+for(let h=1;h<=8;h++)$("fHours").add(new Option(h+(h>1?" hours":" hour"),h));
+
+function render(){
+  const city=$("city").value,type=$("type").value,max=+$("max").value,s=$("sort").value;
+  let list=P.filter(x=>x.c===city&&x.p<=max&&(!type||x.t.includes(type)));
+  list.sort((a,b)=>s==="price"?a.p-b.p:s==="rating"?b.r-a.r:a.d-b.d);
+  $("count").textContent=list.length+" photographer"+(list.length!==1?"s":"")+" available in "+city;
+  $("grid").innerHTML=list.length?list.map(x=>`
+  <div class="card">
+    <div class="top"><div class="av" style="background:${x.col}">${x.n.split(" ").map(w=>w[0]).join("")}</div>
+    <div><h3>${x.n}</h3><div class="meta">${x.a} · ${x.d} km away</div></div></div>
+    <div class="meta">★ ${x.r} · ${x.j} shoots</div>
+    <div class="tags">${x.t.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+    <div class="row"><div class="price">${inr(x.p)}<small> /hr</small></div><button class="btn" onclick="openBook(${x.id})">Book</button></div>
+  </div>`).join(""):'<p class="empty">No photographers match these filters. Try widening them.</p>';
+}
+["city","type","max","sort"].forEach(i=>$(i).addEventListener("change",render));
+
+function openBook(id){
+  current=P.find(x=>x.id===id);
+  $("mName").textContent="Book "+current.n;
+  $("mMeta").textContent=current.a+", "+current.c+" · "+inr(current.p)+"/hr";
+  const t=new Date();t.setDate(t.getDate()+1);
+  $("fDate").min=new Date().toISOString().slice(0,10);
+  $("fDate").value=t.toISOString().slice(0,10);
+  $("err").textContent="";calc();
+  $("modal").classList.add("open");
+}
+function calc(){if(current)$("mTotal").textContent=inr(current.p*(+$("fHours").value))}
+$("fHours").addEventListener("change",calc);
+$("cancel").onclick=()=>$("modal").classList.remove("open");
+$("modal").addEventListener("click",e=>{if(e.target.id==="modal")$("modal").classList.remove("open")});
+
+function getB(){try{return JSON.parse(localStorage.getItem("clickhour")||"[]")}catch(e){return window._b||[]}}
+function setB(v){window._b=v;try{localStorage.setItem("clickhour",JSON.stringify(v))}catch(e){}}
+
+$("confirm").onclick=()=>{
+  const name=$("fName").value.trim(),phone=$("fPhone").value.trim(),date=$("fDate").value,time=$("fTime").value;
+  if(name.length<2)return $("err").textContent="Please enter your name.";
+  if(!/^[6-9]\d{9}$/.test(phone))return $("err").textContent="Enter a valid 10-digit mobile number.";
+  if(!date||!time)return $("err").textContent="Pick a date and time.";
+  if(new Date(date+"T"+time)<new Date())return $("err").textContent="Please choose a future time.";
+  const hrs=+$("fHours").value;
+  const b=getB();
+  b.unshift({ref:"CH"+Math.floor(10000+Math.random()*90000),pid:current.id,who:current.n,name,date,time,hrs,total:current.p*hrs});
+  setB(b);
+  $("modal").classList.remove("open");
+  ["fName","fPhone"].forEach(i=>$(i).value="");
+  renderB();toast("Booked! Ref "+b[0].ref);
+  $("bookings").scrollIntoView();
+};
+function renderB(){
+  const b=getB();
+  $("bklist").innerHTML=b.length?b.map((x,i)=>`
+  <div class="bk"><div><b>${x.who}</b> · ${x.date} at ${x.time}<div class="meta">${x.hrs} hr · ${inr(x.total)} · Ref ${x.ref} · for ${x.name.replace(/</g,"&lt;")}</div></div>
+  <button class="btn ghost" onclick="cancelB(${i})">Cancel</button></div>`).join(""):'<p class="empty">No bookings yet.</p>';
+}
+function cancelB(i){const b=getB();b.splice(i,1);setB(b);renderB();toast("Booking cancelled")}
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2600)}
+render();renderB();
+</script>
+</body>
+</html>
